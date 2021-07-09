@@ -1,8 +1,12 @@
+import { Text } from '@chakra-ui/react';
 import Head from 'next/head';
 import Layout from '../components/Layout/Layout';
 import Pokemon from '../components/Pokemon/Pokemon';
 
 export default function Home() {
+  console.log(process.env.NEXTAUTH_URL);
+  console.log(process.env.NEXT_PUBLIC_TEST);
+  console.log(process.env.VERCEL_URL);
   return (
     <>
       <Head>
@@ -11,7 +15,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Pokemon />
+        {/* <Pokemon /> */}
+        <Text>{process.env.NEXTAUTH_URL}</Text>
+        <Text>{process.env.NEXT_PUBLIC_TEST}</Text>
+        <Text>{process.env.VERCEL_URL}</Text>
       </Layout>
     </>
   );
