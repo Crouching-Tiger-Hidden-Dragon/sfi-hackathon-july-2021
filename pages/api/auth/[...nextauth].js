@@ -47,9 +47,7 @@ export default NextAuth({
       },
     }),
   ],
-
   // A database is optional, but required to persist accounts in a database
-  database: process.env.DATABASE_URL,
   session: {
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
@@ -63,5 +61,34 @@ export default NextAuth({
     // Use it to limit write operations. Set to 0 to always update the database.
     // Note: This option is ignored if using JSON Web Tokens
     updateAge: 24 * 60 * 60, // 24 hours
+  },
+  callbacks: {
+    /**
+     * @param  {object} session      Session object
+     * @param  {object} token        User object    (if using database sessions)
+     *                               JSON Web Token (if not using database sessions)
+     * @return {object}              Session that will be returned to the client
+     */
+    async session(session, token) {
+      // Add property to session, like an access_token from a provider.
+      session.accessToken = token.accessToken;
+      return session;
+    },
+
+    /**
+     * @param  {object}  token     Decrypted JSON Web Token
+     * @param  {object}  user      User object      (only available on sign in)
+     * @param  {object}  account   Provider account (only available on sign in)
+     * @param  {object}  profile   Provider profile (only available on sign in)
+     * @param  {boolean} isNewUser True if new user (only available on sign in)
+     * @return {object}            JSON Web Token that will be saved
+     */
+    async jwt(token, user, account, profile, isNewUser) {
+      // Add access_token to the token right after signin
+      if (account?.accessToken) {
+        token.accessToken = account.accessToken;
+      }
+      return token;
+    },
   },
 });
