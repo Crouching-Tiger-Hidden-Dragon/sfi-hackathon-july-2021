@@ -1,4 +1,4 @@
-name: Java keroku
+name: keroku
 
 on:
   push:
