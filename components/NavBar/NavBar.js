@@ -42,7 +42,7 @@ const NavBar = () => {
           <NavLink path="/" variant="ghost" rounded={'md'} size={'lg'}>
             <HStack fontSize={'2xl'} spacing={2} alignItems={'center'}>
               <Box>🛰</Box>
-              <Text>Space X</Text>
+              <Text>NASA</Text>
             </HStack>
           </NavLink>
 
@@ -83,17 +83,15 @@ const NavBar = () => {
                   <MenuItem>{session.user.name ?? '--'}</MenuItem>
                   <MenuItem>{session.user.email ?? '--'}</MenuItem>
                   <MenuDivider />
-                  <MenuItem>
-                    <Link
-                      href={'/api/auth/signout'}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        signOut();
-                      }}
-                    >
-                      Sign Out
-                    </Link>
-                  </MenuItem>
+                  <Link
+                    href={'/api/auth/signout'}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      signOut();
+                    }}
+                  >
+                    <MenuItem>Sign Out</MenuItem>
+                  </Link>
                 </MenuList>
               </>
             )}

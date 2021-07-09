@@ -5,6 +5,11 @@ import NavBar from '../NavBar/NavBar';
 const Layout = ({ children }) => {
   return (
     <>
+      <Head>
+        <title>Crouching Tiger Hidden Dragon</title>
+        <meta name="description" content="SFI Hackathon July 2021" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <NavBar />
       <Flex height="90vh" alignItems="center" justifyContent="center">
         {children}
