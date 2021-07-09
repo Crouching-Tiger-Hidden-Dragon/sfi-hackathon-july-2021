@@ -19,16 +19,26 @@ import {
 } from '@chakra-ui/react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import NavLink from './NavLink';
+import plantIcon from '../../public/plant.svg';
+import Image from 'next/image';
 
 const NavBar = () => {
   const [session, loading] = useSession();
 
-  const links = ['Dashboard', 'Projects', 'Team'];
+  const links = ['Dashboard', 'Library', 'Garden'];
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
-      <Flex h="10vh" alignItems={'center'} justifyContent={'space-between'}>
+    <Box
+      position={'fixed'}
+      top={0}
+      left={0}
+      w={'full'}
+      bg={useColorModeValue('gray.100', 'gray.900')}
+      px={4}
+      zIndex={99}
+    >
+      <Flex h="6rem" alignItems={'center'} justifyContent={'space-between'}>
         <IconButton
           size={'md'}
           icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -38,11 +48,11 @@ const NavBar = () => {
           onClick={isOpen ? onClose : onOpen}
         />
 
-        <HStack spacing={8} alignItems={'baseline'}>
+        <HStack spacing={8} alignItems={'center'}>
           <NavLink path="/" variant="ghost" rounded={'md'} size={'lg'}>
             <HStack fontSize={'2xl'} spacing={2} alignItems={'center'}>
-              <Box>🛰</Box>
-              <Text>NASA</Text>
+              <Image src={plantIcon} height={50} width={50} />
+              <Text>My Garden</Text>
             </HStack>
           </NavLink>
 
@@ -60,7 +70,7 @@ const NavBar = () => {
               <Button
                 as={'a'}
                 href={'/api/auth/signin'}
-                colorScheme={'teal'}
+                colorScheme={'green'}
                 onClick={(e) => {
                   e.preventDefault();
                   signIn();

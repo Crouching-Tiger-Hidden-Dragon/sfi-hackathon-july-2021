@@ -1,0 +1,42 @@
+{
+  "library": [
+    {
+      "id": 1,
+      "name": "Cactus",
+      "image": "https://www.houseplantsexpert.com/image-files/Opuntia-microdasys.jpg"
+    },
+    {
+      "id": 2,
+      "name": "African Violet",
+      "image": "https://www.houseplantsexpert.com/assets/images/av-blue-1.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Barberton Daisy",
+      "image": "https://www.houseplantsexpert.com/assets/images/gerbera_jamesonii_1.jpg"
+    }
+  ],
+  "garden": [
+    {
+      "userId": 1,
+      "plantId": 2,
+      "name": "African Violet",
+      "image": "https://www.houseplantsexpert.com/assets/images/av-blue-1.jpg",
+      "id": 2
+    },
+    {
+      "userId": 1,
+      "plantId": 1,
+      "name": "Cactus",
+      "image": "https://www.houseplantsexpert.com/image-files/Opuntia-microdasys.jpg",
+      "id": 3
+    },
+    {
+      "userId": 1,
+      "plantId": 2,
+      "name": "African Violet",
+      "image": "https://www.houseplantsexpert.com/assets/images/av-blue-1.jpg",
+      "id": 4
+    }
+  ]
+}

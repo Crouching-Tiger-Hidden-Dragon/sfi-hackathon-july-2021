@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
-    "lint": "next lint"
+    "lint": "next lint",
+    "server": "json-server --watch ./db/db.json --port 3004"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.14",
