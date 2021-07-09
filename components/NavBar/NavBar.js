@@ -17,9 +17,8 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
-import NavLink from './NavLink';
 import { signIn, signOut, useSession } from 'next-auth/client';
+import NavLink from './NavLink';
 
 const NavBar = () => {
   const [session, loading] = useSession();
