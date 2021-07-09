@@ -1,10 +1,17 @@
 import { useQuery } from 'react-query';
-import { request, resolve } from './utils/resolveRequest';
+import { resolve, serverRequest } from '../utils/resolveRequest';
 
-const getLibrary = async () => {
-  return await resolve(request.get(`/library`).then((res) => res.data));
+const getLibrary = async (token) => {
+  return await resolve(
+    serverRequest
+      .get(`/getAllPlants`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.data)
+  );
 };
 
-export default function useLibrary() {
-  return useQuery('library', getLibrary);
+export default function useLibrary(token) {
+  return useQuery('library', () => getLibrary(token), {
+    enabled: Boolean(token),
+    cacheTime: 1000,
+  });
 }

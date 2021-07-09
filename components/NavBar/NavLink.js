@@ -9,8 +9,9 @@ const NavLink = ({ children, path }) => (
       rounded={'md'}
       _hover={{
         textDecoration: 'none',
-        bg: useColorModeValue('gray.200', 'gray.700'),
+        bg: useColorModeValue('green.50', 'gray.700'),
       }}
+      fontSize={'xl'}
     >
       {children}
     </Link>

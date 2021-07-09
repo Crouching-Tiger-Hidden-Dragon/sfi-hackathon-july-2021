@@ -3,16 +3,17 @@ import React from 'react';
 import GardenCard from './GardenCard';
 import LibraryCard from './LibraryCard';
 
-const CardGrid = ({ list = [], variant }) => {
+const CardGrid = ({ list, variant }) => {
   return (
     <SimpleGrid mt={10} width={'full'} columns={3} spacing={'50px'}>
-      {list.map((plant, idx) =>
-        variant === 'library' ? (
-          <LibraryCard key={idx} plant={plant} />
-        ) : (
-          <GardenCard key={idx} plant={plant} />
-        )
-      )}
+      {Array.isArray(list) &&
+        list.map((plant, idx) =>
+          variant === 'library' ? (
+            <LibraryCard key={idx} plant={plant} />
+          ) : (
+            <GardenCard key={idx} plant={plant} />
+          )
+        )}
     </SimpleGrid>
   );
 };

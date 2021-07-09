@@ -1,14 +1,16 @@
-import { Box, Button, Heading, Image, Stack } from '@chakra-ui/react';
+import { Box, Button, Heading, Image, Stack, Text } from '@chakra-ui/react';
 import useAddPlant from '../../hooks/useAddPlant';
+import useToken from '../../hooks/useToken';
 import CardContainer from './CardContainer';
 
 const LibraryCard = ({ plant }) => {
-  const { id = 0, name = 'Placeholder', image } = plant ?? {};
+  const { accessToken } = useToken();
+  const { id = 0, name = 'Placeholder', image, description } = plant ?? {};
   const { mutate, isSuccess, reset } = useAddPlant();
 
   const handleAdd = () => {
     mutate(
-      { userId: 1, plantId: id, name, image },
+      { id, token: accessToken },
       {
         onSettled: () => {
           setTimeout(() => reset(), 1500);
@@ -19,7 +21,7 @@ const LibraryCard = ({ plant }) => {
 
   return (
     <CardContainer>
-      <Image h={'240px'} w={'full'} src={image} objectFit={'cover'} />
+      <Image h={'200px'} w={'full'} src={image} objectFit={'cover'} />
       {/* <Flex justify={'center'} mt={-12}>
         <Avatar
           size={'xl'}
@@ -34,31 +36,22 @@ const LibraryCard = ({ plant }) => {
       </Flex> */}
 
       <Box p={6}>
-        <Stack spacing={0} align={'center'} mb={5}>
+        <Stack
+          spacing={2}
+          align={'center'}
+          mb={5}
+          textAlign={'center'}
+          minH={'9rem'}
+        >
           <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
             {name}
           </Heading>
-          {/* <Text color={'gray.500'}>Frontend Developer</Text> */}
+          <Text color={'gray.500'}>{description}</Text>
         </Stack>
-
-        {/* <Stack direction={'row'} justify={'center'} spacing={6}>
-            <Stack spacing={0} align={'center'}>
-              <Text fontWeight={600}>23k</Text>
-              <Text fontSize={'sm'} color={'gray.500'}>
-                Followers
-              </Text>
-            </Stack>
-            <Stack spacing={0} align={'center'}>
-              <Text fontWeight={600}>23k</Text>
-              <Text fontSize={'sm'} color={'gray.500'}>
-                Followers
-              </Text>
-            </Stack>
-          </Stack> */}
 
         <Button
           w={'full'}
-          mt={8}
+          mt={2}
           colorScheme={'green'}
           rounded={'md'}
           _hover={{
@@ -68,7 +61,7 @@ const LibraryCard = ({ plant }) => {
           variant={isSuccess ? 'outline' : 'solid'}
           onClick={handleAdd}
         >
-          {isSuccess ? 'Added! 😁' : 'Add to Garden'}
+          {isSuccess ? '😁 Added!' : '➕ Add to Garden'}
         </Button>
       </Box>
     </CardContainer>

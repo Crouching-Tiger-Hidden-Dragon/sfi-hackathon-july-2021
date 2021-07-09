@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Crouching Tiger Hidden Dragon</title>
+        <title>FloraDB</title>
         <meta name="description" content="SFI Hackathon July 2021" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

@@ -7,78 +7,92 @@ import {
   Heading,
   Image,
   Stack,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import moment from 'moment';
 import { useQueryClient } from 'react-query';
+import useLogWatering from '../../hooks/useLogWatering';
 import useRemovePlant from '../../hooks/useRemovePlant';
+import useToken from '../../hooks/useToken';
 import CardContainer from './CardContainer';
+import RemovePlant from './RemovePlant';
 
 const GardenCard = ({ plant }) => {
-  const queryClient = useQueryClient();
-  const { id = 0, name = 'Placeholder', image } = plant ?? {};
-  const { mutate } = useRemovePlant();
+  const { accessToken: token } = useToken();
+  const {
+    gardenId = 0,
+    name = 'Placeholder',
+    image,
+    lastWaterDate,
+    waterDays = 7,
+  } = plant ?? {};
+  const { mutate: waterMutate, isSuccess, reset } = useLogWatering();
+  const { mutate: removeMutate } = useRemovePlant();
+
+  const handleWater = () => {
+    waterMutate(
+      { id: gardenId, token },
+      {
+        onSettled: () => {
+          setTimeout(() => reset(), 1500);
+        },
+      }
+    );
+  };
 
   const handleRemove = () => {
-    mutate(id, {
-      onSettled: () => {
-        queryClient.invalidateQueries('garden');
-      },
-    });
+    removeMutate({ id: gardenId, token });
   };
 
   return (
     <CardContainer>
       <Image h={'240px'} w={'full'} src={image} objectFit={'cover'} />
-      {/* <Flex justify={'center'} mt={-12}>
-        <Avatar
-          size={'xl'}
-          src={
-            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
-          }
-          alt={'Author'}
-          css={{
-            border: '2px solid white',
-          }}
-        />
-      </Flex> */}
 
       <Box p={6}>
         <Stack spacing={0} align={'center'} mb={5}>
           <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
             {name}
           </Heading>
-          {/* <Text color={'gray.500'}>Frontend Developer</Text> */}
         </Stack>
 
-        {/* <Stack direction={'row'} justify={'center'} spacing={6}>
-            <Stack spacing={0} align={'center'}>
-              <Text fontWeight={600}>23k</Text>
-              <Text fontSize={'sm'} color={'gray.500'}>
-                Followers
-              </Text>
-            </Stack>
-            <Stack spacing={0} align={'center'}>
-              <Text fontWeight={600}>23k</Text>
-              <Text fontSize={'sm'} color={'gray.500'}>
-                Followers
-              </Text>
-            </Stack>
-          </Stack> */}
+        <Stack direction={'row'} justify={'center'} spacing={6}>
+          <Stack spacing={0} align={'center'}>
+            <Text fontSize={'sm'} color={'gray.500'}>
+              Last Shower
+            </Text>
+            <Text fontWeight={600}>
+              {lastWaterDate ? moment(lastWaterDate).format('ddd M/D') : 'N/A'}
+            </Text>
+          </Stack>
+          <Stack spacing={0} align={'center'}>
+            <Text fontSize={'sm'} color={'gray.500'}>
+              Next Shower
+            </Text>
+            <Text fontWeight={600}>
+              {lastWaterDate
+                ? moment(lastWaterDate).add(waterDays, 'days').format('ddd M/D')
+                : 'Soon!'}
+            </Text>
+          </Stack>
+        </Stack>
 
         <Button
           w={'full'}
           mt={8}
-          bg={useColorModeValue('#151f21', 'gray.900')}
-          color={'white'}
+          colorScheme={'green'}
           rounded={'md'}
           _hover={{
             transform: 'translateY(-2px)',
             boxShadow: 'lg',
           }}
-          onClick={handleRemove}
+          onClick={handleWater}
+          variant={isSuccess ? 'outline' : 'solid'}
         >
-          Remove from Garden
+          {isSuccess ? '💦 Yay' : '💧 Log Shower'}
         </Button>
+
+        <RemovePlant handleRemove={handleRemove} />
       </Box>
     </CardContainer>
   );

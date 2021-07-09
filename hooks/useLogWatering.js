@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { serverRequest, resolve } from '../utils/resolveRequest';
 
-const addPlant = async (id, token) => {
+const logWatering = async (id, token) => {
   return await resolve(
     serverRequest
       .post(
-        `/addPlant/${id}`,
+        `/addWater/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -15,9 +15,9 @@ const addPlant = async (id, token) => {
   );
 };
 
-export default function useAddPlant() {
+export default function useLogWatering() {
   const queryClient = useQueryClient();
-  return useMutation(({ id, token }) => addPlant(id, token), {
+  return useMutation(({ id, token }) => logWatering(id, token), {
     onSettled: () => {
       queryClient.invalidateQueries('garden');
     },

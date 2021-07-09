@@ -6,7 +6,7 @@ const CardContainer = ({ children }) => {
     <Box
       maxWidth={'270px'}
       w={'full'}
-      bg={useColorModeValue('white', 'gray.800')}
+      bg={useColorModeValue('green.50', 'gray.700')}
       boxShadow={'2xl'}
       rounded={'md'}
       overflow={'hidden'}

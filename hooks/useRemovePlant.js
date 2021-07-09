@@ -1,10 +1,21 @@
-import { useMutation, useQuery } from 'react-query';
-import { request, resolve } from './utils/resolveRequest';
+import { useMutation, useQueryClient } from 'react-query';
+import { resolve, serverRequest } from '../utils/resolveRequest';
 
-const removePlant = async (id) => {
-  return await resolve(request.delete(`/garden/${id}`).then((res) => res.data));
+const removePlant = async (id, token) => {
+  return await resolve(
+    serverRequest
+      .delete(`/removePlant/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => res.data)
+  );
 };
 
-export default function useAddPlant() {
-  return useMutation((id) => removePlant(id));
+export default function useRemovePlant() {
+  const queryClient = useQueryClient();
+  return useMutation(({ id, token }) => removePlant(id, token), {
+    onSettled: () => {
+      queryClient.invalidateQueries('garden');
+    },
+  });
 }

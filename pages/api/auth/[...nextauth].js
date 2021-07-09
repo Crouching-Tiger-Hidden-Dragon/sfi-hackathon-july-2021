@@ -1,14 +1,15 @@
 // pages/api/auth/[...nextauth].js
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
+import { resolve, serverRequest } from '../../../utils/resolveRequest';
 
 export default NextAuth({
   // Configure one or more authentication providers
   providers: [
-    Providers.Google({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
+    // Providers.Google({
+    //   clientId: process.env.GOOGLE_ID,
+    //   clientSecret: process.env.GOOGLE_SECRET,
+    // }),
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Credentials',
@@ -26,21 +27,17 @@ export default NextAuth({
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        const res = await fetch(
-          `https://hidden-dragon.herokuapp.com/oauth/token?grant_type=password&username=${credentials.username}&password=${credentials.password}&scope=read`,
-          {
-            method: 'POST',
-            headers: {
-              Authorization: 'Basic Y2xpZW50OnNlY3JldA==',
-            },
-          }
+        const { data } = await resolve(
+          serverRequest.post(
+            'https://oauth2-jwt.herokuapp.com/authenticate',
+            credentials
+          )
         );
 
-        const user = await res.json();
-
         // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user;
+        if (data) {
+          // sessionStorage.setItem('token', data.token);
+          return data;
         }
         // Return null if user data could not be retrieved
         return null;
@@ -61,5 +58,30 @@ export default NextAuth({
     // Use it to limit write operations. Set to 0 to always update the database.
     // Note: This option is ignored if using JSON Web Tokens
     updateAge: 24 * 60 * 60, // 24 hours
+  },
+  callbacks: {
+    /**
+     * @param  {object}  token     Decrypted JSON Web Token
+     * @param  {object}  user      User object      (only available on sign in)
+     * @param  {object}  account   Provider account (only available on sign in)
+     * @param  {object}  profile   Provider profile (only available on sign in)
+     * @param  {boolean} isNewUser True if new user (only available on sign in)
+     * @return {object}            JSON Web Token that will be saved
+     */
+    async jwt(token, user) {
+      // Add access_token to the token right after signin
+      if (user) {
+        token.accessToken = user.token;
+        token.name = user.username;
+      }
+
+      return token;
+    },
+    async session(session, token) {
+      // Add property to session, like an access_token from a provider.
+      session.accessToken = token.accessToken;
+      session.name = token.name;
+      return session;
+    },
   },
 });
