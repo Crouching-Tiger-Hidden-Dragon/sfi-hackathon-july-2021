@@ -2,16 +2,13 @@ import {
   Avatar,
   Box,
   Button,
-  Center,
   Flex,
   Heading,
   Image,
   Stack,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import moment from 'moment';
-import { useQueryClient } from 'react-query';
 import useLogWatering from '../../hooks/useLogWatering';
 import useRemovePlant from '../../hooks/useRemovePlant';
 import useToken from '../../hooks/useToken';
